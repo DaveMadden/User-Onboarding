@@ -2,11 +2,11 @@
 import * as yup from 'yup';
 
 const formSchema = yup.object().shape({
-    fname: yup
+    first_name: yup
         .string()
         .trim()
         .required('first name is required'),
-    lname: yup
+    last_name: yup
         .string()
         .trim()
         .required('last name is required'),
@@ -18,7 +18,9 @@ const formSchema = yup.object().shape({
         .string()
         .min(6, 'password must be at least 6 chars')
         .required('dude you need a password'),
-    tos: yup.boolean(), //how to make an error for a checkbox not submitted?
+    tos: yup
+        .boolean()
+        .oneOf([true], "give me the data, bro"), //how to make an error for a checkbox not submitted?
 });
 
 export default formSchema;

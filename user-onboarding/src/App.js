@@ -19,7 +19,7 @@ const initialFormErrors = {
   last_name: "",
   email: "",
   pwd: "",
-  terms: "", //this is a checkbox that must be checked to submit
+  tos: "", //this is a checkbox that must be checked to submit
 }
 
 const initialUsers = [];

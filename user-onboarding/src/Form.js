@@ -27,6 +27,7 @@ export default function Form(props) {
                 <div>{errors.last_name}</div>
                 <div>{errors.email}</div>
                 <div>{errors.pwd}</div>
+                <div>{errors.tos}</div>
             </div>
             <div className="form-group inputs">
                 <label> First Name: 
