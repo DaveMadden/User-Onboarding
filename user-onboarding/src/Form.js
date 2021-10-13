@@ -11,10 +11,13 @@ export default function Form(props) {
     } = props;
 
     const onSubmit = evt => {
-        console.log("onSubmit from Form.js", evt);
+        evt.preventDefault()
+        submit();
     }
     const onChange = evt => {
-        console.log("onChange from Form.js", evt);
+        const { name, value, checked, type } = evt.target;
+        const valueToUse = type === "checkbox" ? checked : value;
+        change(name, valueToUse);
     }
 
     return (
