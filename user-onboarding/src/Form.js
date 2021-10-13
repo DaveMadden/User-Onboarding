@@ -23,25 +23,25 @@ export default function Form(props) {
     return (
         <form className="form container" onSubmit={onSubmit}>
             <div className='errors'>
-                <div>{errors.fname}</div>
-                <div>{errors.lname}</div>
+                <div>{errors.first_name}</div>
+                <div>{errors.last_name}</div>
                 <div>{errors.email}</div>
                 <div>{errors.pwd}</div>
             </div>
             <div className="form-group inputs">
                 <label> First Name: 
                     <input 
-                        value={values.fname}
+                        value={values.first_name}
                         onChange={onChange}
-                        name="fname"
+                        name="first_name"
                         type="text"
                     />
                 </label>
                 <label> Last Name: 
                     <input 
-                        value={values.lname}
+                        value={values.last_name}
                         onChange={onChange}
-                        name="lname"
+                        name="last_name"
                         type="text"
                     />
                 </label>

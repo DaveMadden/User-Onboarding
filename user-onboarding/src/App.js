@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import Form from "./Form";
+import User from "./User";
 import axios from 'axios';
 import schema from './validation/formSchema';
 import * as yup from 'yup';
 
 //---   INITIAL STATES   ---
 const initialFormValues = {
-  fname: "",
-  lname: "",
+  first_name: "",
+  last_name: "",
   email: "",
   pwd: "",
   tos: false, //this is a checkbox
 }
 const initialFormErrors = {
-  fname: "",
-  lname: "",
+  first_name: "",
+  last_name: "",
   email: "",
   pwd: "",
   terms: "", //this is a checkbox that must be checked to submit
@@ -38,7 +39,8 @@ function App() {
   const getUsers = () => {
     axios.get('https://reqres.in/api/users')
       .then(res=>{
-        setUsers(res.data);
+        console.log(res);
+        setUsers(res.data.data);
       })
       .catch(err => {
         console.error(err);
@@ -47,7 +49,7 @@ function App() {
   const postNewUser = newUser => {
     axios.post('https://reqres.in/api/users', newUser)
       .then(res => {
-        // console.log(res.data);
+        console.log(users);
         setUsers([res.data, ...users]);
       })
       .catch(err => {
@@ -62,16 +64,16 @@ function App() {
   const inputChange = (name, value) => {
     console.log('input change: ', name, value); //PLACEHOLDER
     validate(name, value);
-    setFormValues({...formValues, [name]:[value]});
+    setFormValues({...formValues, [name]:value});
   }
 
   const formSubmit = () => {
     // console.log("form submit"); //PLACEHOLDER
     const newUser = { //NEED TO CHANGE THESE KEYS TO MATCH API????
-      fname: formValues.fname, //TRIM ERRORING OUT HERE
-      lname: formValues.lname,
-      email: formValues.email,
-      pwd: formValues.pwd,
+      first_name: formValues.first_name.trim(), //TRIM ERRORING OUT HERE
+      last_name: formValues.last_name.trim(),
+      email: formValues.email.trim(),
+      pwd: formValues.pwd.trim(),
       tos: formValues.tos,
     }
     console.log(newUser);
@@ -104,6 +106,13 @@ useEffect(() => {
         disabled={disabled}
         errors={formErrors}
         />
+      {
+        users.map(usr => {
+          return (
+            <User key={usr.id} details={usr}/>
+          )
+        })
+      }
     </div>
   );
 }
