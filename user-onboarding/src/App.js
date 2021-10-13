@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import Form from "./Form";
 import axios from 'axios';
-//import schema from SOMEWHERE
+import schema from './validation/formSchema';
 import * as yup from 'yup';
 
 //---   INITIAL STATES   ---
@@ -27,26 +27,28 @@ const initialDisabled = true;
 
 
 function App() {
+  //STATE
   const [users, setUsers] = useState(initialUsers); //array of users
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState(initialFormErrors);
   const [disabled, setDisabled] = useState(initialDisabled);
 
-  const inputChange = (name, value) => {
-    console.log('input change: ', name, value); //PLACEHOLDER
-    //VALIDATE HERE
-    setFormValues({...formValues, [name]:[value]});
-  }
   //HELPERS
 
   const getUsers = () => {
-    console.log("getUsers");
+    axios.get('https://reqres.in/api/users')
+      .then(res=>{
+        setUsers(res.data);
+      })
+      .catch(err => {
+        console.error(err);
+      })
   }
-
   const postNewUser = newUser => {
     axios.post('https://reqres.in/api/users', newUser)
       .then(res => {
-        console.log(res.data);
+        // console.log(res.data);
+        setUsers([res.data, ...users]);
       })
       .catch(err => {
         console.error(err);
@@ -56,12 +58,16 @@ function App() {
       })
   }
 
-
-
   //EVENT HANDLERS
+  const inputChange = (name, value) => {
+    console.log('input change: ', name, value); //PLACEHOLDER
+    validate(name, value);
+    setFormValues({...formValues, [name]:[value]});
+  }
+
   const formSubmit = () => {
-    console.log("form submit"); //PLACEHOLDER
-    const newUser = {
+    // console.log("form submit"); //PLACEHOLDER
+    const newUser = { //NEED TO CHANGE THESE KEYS TO MATCH API????
       fname: formValues.fname, //TRIM ERRORING OUT HERE
       lname: formValues.lname,
       email: formValues.email,
@@ -71,6 +77,23 @@ function App() {
     console.log(newUser);
     postNewUser(newUser);
   }
+
+  const validate = (name, value) => {
+    yup.reach(schema, name)
+      .validate(value)
+      .then(() => setFormErrors({ ...formErrors, [name]:''}))
+      .catch(err => setFormErrors({ ...formErrors, [name]: err.errors[0] }))
+  }
+
+//SIDE EFFECTS = these are a trip
+
+useEffect(() => {
+  getUsers()
+}, []);
+
+useEffect(() => {
+  schema.isValid(formValues).then(valid => setDisabled(!valid))
+}, [formValues]);
 
   return (
     <div className="App">

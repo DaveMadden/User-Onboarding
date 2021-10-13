@@ -17,6 +17,7 @@ const formSchema = yup.object().shape({
     pwd: yup
         .string()
         .trim()
+        .min(6, 'password must be at least 6 chars')
         .required('dude you need a password'),
     tos: yup.boolean(), //how to make an error for a checkbox not submitted?
 });
