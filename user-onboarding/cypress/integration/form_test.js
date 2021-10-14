@@ -31,4 +31,100 @@ describe('testing user-onboarding', () => {
         tos().should('exist');
         submit().should('exist');
     })
+
+    describe('filling out inputs etc', () => {
+        it('can navigate to the url', () => {
+            cy.url().should('include', 'localhost');
+        })
+        // submit button should start out disabled
+        it('submit button starts out disabled', () => {
+            submit().should('be.disabled');
+        })
+        //can type in inputs
+        it('can type in the inputs and check the box', () => {
+            fname()
+                .should('have.value', '')
+                .type('test content')
+                .should('have.value', 'test content');
+            lname()
+                .should('have.value', '')
+                .type('test content')
+                .should('have.value', 'test content');
+            email()
+                .should('have.value', '')
+                .type('test@test.com')
+                .should('have.value', 'test@test.com');
+            pwd()
+                .should('have.value', '')
+                .type('test content')
+                .should('have.value', 'test content');
+            tos()
+                .should('not.be.checked')
+                .check()
+                .should('be.checked');
+        })
+    })
+    describe('testing submit', () => {
+        it('submit is enabled when shit is good', () => {
+            fname().type('testing');
+            lname().type('testing');
+            email().type('testing@test.com');
+            pwd().type('testing');
+            tos().check();
+            submit().should('not.be.disabled');
+        })
+        it('submit populates the dom', () => {
+            fname().type('Wendell');
+            lname().type('Berry');
+            email().type('nocontact@doesnthaveone.com');
+            pwd().type('worldendingfire');
+            tos().check();
+            submit().click();
+            cy.contains('Wendell');
+        })
+    })
+    describe('testing validation', () => {
+        //no first
+        it('testing no first name', () => {
+            lname().type('Berry');
+            email().type('nocontact@doesnthaveone.com');
+            pwd().type('worldendingfire');
+            tos().check();
+            submit().should('be.disabled');
+        })
+        //no last
+        it('testing no last name', () => {
+            fname().type('Wendell');
+            email().type('nocontact@doesnthaveone.com');
+            pwd().type('worldendingfire');
+            tos().check();
+            submit().should('be.disabled');
+        })
+        //invalid email
+        it('testing no last name', () => {
+            fname().type('Wendell');
+            lname().type('Berry');
+            email().type('no.com');
+            pwd().type('worldendingfire');
+            tos().check();
+            submit().should('be.disabled');
+        })
+        //password too short
+        it('testing no last name', () => {
+            fname().type('Wendell');
+            lname().type('Berry');
+            email().type('no@no.com');
+            pwd().type('wow');
+            tos().check();
+            submit().should('be.disabled');
+        })
+        //tos not checked
+        it('testing no last name', () => {
+            fname().type('Wendell');
+            lname().type('Berry');
+            email().type('no@no.com');
+            pwd().type('wowwowweewow');
+            submit().should('be.disabled');
+        })
+    })
 })

@@ -106,6 +106,7 @@ useEffect(() => {
         />
       {
         users.map(usr => {
+          console.log("running the map");
           return (
             <User key={usr.id} details={usr}/>
           )
