@@ -25,8 +25,6 @@ const initialFormErrors = {
 const initialUsers = [];
 const initialDisabled = true;
 
-
-
 function App() {
   //STATE
   const [users, setUsers] = useState(initialUsers); //array of users
@@ -39,7 +37,7 @@ function App() {
   const getUsers = () => {
     axios.get('https://reqres.in/api/users')
       .then(res=>{
-        console.log(res);
+        // console.log(res);
         setUsers(res.data.data);
       })
       .catch(err => {
@@ -49,7 +47,7 @@ function App() {
   const postNewUser = newUser => {
     axios.post('https://reqres.in/api/users', newUser)
       .then(res => {
-        console.log(users);
+        // console.log(users);
         setUsers([res.data, ...users]);
       })
       .catch(err => {
@@ -62,7 +60,7 @@ function App() {
 
   //EVENT HANDLERS
   const inputChange = (name, value) => {
-    console.log('input change: ', name, value); //PLACEHOLDER
+    // console.log('input change: ', name, value); //PLACEHOLDER
     validate(name, value);
     setFormValues({...formValues, [name]:value});
   }
@@ -76,7 +74,7 @@ function App() {
       pwd: formValues.pwd.trim(),
       tos: formValues.tos,
     }
-    console.log(newUser);
+    // console.log(newUser);
     postNewUser(newUser);
   }
 
